@@ -1,0 +1,175 @@
+<!-- multi_step_form.html -->
+{% extends 'base.html' %}
+{% block content %}
+<div class="container-md maxw-sm">
+  <h1>Watermelon Markets - Seller Survey</h1>
+  <form method="POST" id="giftcard-form">
+    {% csrf_token %}
+    <!-- {{ formset.management_form }} -->
+    <div id="step1" class="form-step">
+      <h2>What is the name of your store?</h2>
+      <p>
+        Example: Razer Gold, Amazon, Target. (If you have multiple stores, choose your top gift card -- you can always
+        add
+        more later.)
+      </p>
+      <div class="input-group mb-3">
+        <span class="input-group-text" id="basic-addon1">{{ form.store_name.label }}</span>
+        <input type="text" class="form-control" id="{{ form.store_name.id_for_label }}"
+          name="{{ form.store_name.name }}">
+      </div>
+
+      <button type="submit" class="btn btn-primary next-step">Next</button>
+    </div>
+
+    <div id="step2" class="form-step" style="display: none;">
+      <h2>Balance:</h2>
+      <p>
+        What is the balance left on your gift card? If possible, please double check your balance before entering the
+        number here. Example answer: $100, 2,000 INR, 200 EUR.
+      </p>
+      {{ form.amount }}
+      <div class="btn-group mt-3" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-secondary prev-step">Previous</button>
+        <button type="submit" class="btn btn-outline-primary next-step">Next</button>
+      </div>
+    </div>
+
+    <div id="step3" class="form-step" style="display: none;">
+      <h2>Which network would you like to receive funds at?</h2>
+      <p>
+        If you are unsure, please select Polygon. (You may change this later.)
+      </p>
+      {{ form.crypto_network }}
+      <div class="btn-group mt-3" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-secondary prev-step">Previous</button>
+        <button type="submit" class="btn btn-outline-primary next-step">Next</button>
+      </div>
+      <!-- <button type="button" class="btn btn-secondary prev-step">Previous</button>
+
+      <button type="submit" class="btn btn-primary next-step">Next</button> -->
+    </div>
+
+    <div id="step4" class="form-step" style="display: none;">
+      <h2>What Polygon or Ethereum address would you like to receive funds at?</h2>
+      <p>
+        You may change this later. Example: 0xfA63Ca5caF1D88f42e1A73aE0E0cb7060B9E7292
+      </p>
+      <!-- {{ form.wallet_address }} -->
+      <div class="input-group">
+        <!-- <label for="{{ form.store_name.id_for_label }}" class="form-label">{{ form.store_name.label }}</label> -->
+        <span class="input-group-text" id="basic-addon1">{{ form.wallet_address.label }}</span>
+        <input type="text" class="form-control" id="{{ form.wallet_address.id_for_label }}"
+          name="{{ form.wallet_address.name }}">
+      </div>
+      <div class="btn-group mt-3" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-secondary prev-step">Previous</button>
+        <button type="submit" class="btn btn-outline-primary next-step">Next</button>
+      </div>
+    </div>
+
+    <div id="step5" class="form-step" style="display: none;">
+      <h2>Would you prefer to provide a deposit or the card information for validation?</h2>
+      <p>
+        In order to verify your listing, we require either a 10% deposit of the card value in crypto, or full gift card
+        information for verification.
+      </p>
+      {{ form.deposit_or_validate }}
+      <div class="btn-group mt-3" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-secondary prev-step">Previous</button>
+        <button type="submit" class="btn btn-outline-primary next-step">Next</button>
+      </div>
+    </div>
+
+    <div id="step6" class="form-step" style="display: none;">
+      <h2>Please make your deposit via the smart contract</h2>
+      <p>
+        (This page is a placeholder for the deposit prompt)
+      </p>
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" id="{{ form.deposit_confirm.id_for_label }}"
+          name="{{ form.deposit_confirm.name }}">
+        <label class="form-check-label" for="{{ form.deposit_confirm.id_for_label }}">Confirm Deposit</label>
+      </div>
+      <div class="btn-group mt-3" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-secondary prev-step">Previous</button>
+        <button type="submit" class="btn btn-outline-primary next-step check">Next</button>
+      </div>
+    </div>
+
+    <div id="step7" class="form-step" style="display: none;">
+      <h2>Almost done! What is your email address?</h2>
+      <p>
+        We will only use this to reach out about the transaction. Please check this often as we'll use this as the main
+        way of getting in touch.
+      </p>
+      <div class="input-group">
+        <span class="input-group-text" id="basic-addon1">{{ form.email.label }}</span>
+        <input type="text" class="form-control" id="{{ form.email.id_for_label }}" name="{{ form.email.name }}">
+      </div>
+      <div class="btn-group mt-3" role="group" aria-label="Basic outlined example">
+        <button type="button" class="btn btn-outline-secondary prev-step">Previous</button>
+        <button type="submit" class="btn btn-outline-primary next-step">Next</button>
+      </div>
+    </div>
+
+    <div id="final" class="form-step" style="display: none;">
+      <p>
+        Thank you for your submission!
+      </p>
+
+    </div>
+  </form>
+</div>
+
+<script>
+  // Handle next/previous buttons
+  var FINAL = false
+
+  $(document).ready(function () {
+    $(".check").prop("disabled", true);
+  });
+
+  $('.next-step').click(function () {
+    $(this).closest('.form-step').hide().next('.form-step').show();
+    var finalForm = $(this).closest('.form-step').next()
+    if (finalForm.attr('id') === 'final') {
+      FINAL = true
+    } else {
+      FINAL = false
+    }
+  });
+  $('.prev-step').click(function () {
+    $(this).closest('.form-step').hide().prev('.form-step').show();
+  });
+
+  $('#giftcard-form').submit(function (e) {
+    e.preventDefault(); // prevent the default form submission behavior
+
+    var formData = $(this).serialize();
+    var nextForm = $(this).closest('.form-step').next()
+    if (FINAL) { // Add final key-value pair for the form data, when submits the last form step
+      formData += '&final=true';
+    }
+    $.ajax({
+      url: $(this).attr('action'), // get the form action
+      method: $(this).attr('method'), // get the form method
+      data: formData, // get the form data
+      success: function (response) {
+        // alert('Form submitted successfully!'); // show success message
+      },
+      error: function (xhr, errmsg, err) {
+        alert('Form submission failed: ' + errmsg); // show error message
+      }
+    });
+  });
+
+  $('input[type="checkbox"]').change(function () {
+    if ($('input[type="checkbox"]:checked').length > 0) {
+      $('.check').prop('disabled', false);
+    } else {
+      $('.check').prop('disabled', true);
+    }
+  });
+</script>
+{% endblock %}

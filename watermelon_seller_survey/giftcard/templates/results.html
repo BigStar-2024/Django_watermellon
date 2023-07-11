@@ -1,0 +1,46 @@
+<!-- multi_step_form.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container ">
+  <h1>Watermelon Markets - Seller Survey Results</h1>
+  <div class="table-responsive">
+    <table class="table table-success table-striped">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">survey_id</th>
+          <th scope="col">store_name</th>
+          <th scope="col">gift_card_amount</th>
+          <th scope="col">gift_card_amount_currency</th>
+          <!-- <th>price_currency</th> -->
+          <!-- <th>price</th> -->
+          <!-- <th>accepts_crypto</th> -->
+          <th scope="col">crypto_network</th>
+          <th scope="col">wallet_address</th>
+          <th scope="col">email_address</th>
+          <th scope="col">deposit_or_validate</th>
+          <th scope="col">deposit_step</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for giftcard in giftcards %}
+        <tr>
+          <td>{{ giftcard.id }}</td>
+          <td>{{ giftcard.survey_id }}</td>
+          <td>{{ giftcard.store_name }}</td>
+          <td>{{ giftcard.amount.amount }}</td>
+          <td>{{ giftcard.amount.currency }}</td>
+          <!-- <td>{{ giftcard.accepts_crypto }}</td> -->
+          <td>{{ giftcard.crypto_network }}</td>
+          <td>{{ giftcard.wallet_address }}</td>
+          <td>{{ giftcard.email }}</td>
+          <td>{{ giftcard.deposit_or_validate }}</td>
+          <td>{{ giftcard.deposit_confirm }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
